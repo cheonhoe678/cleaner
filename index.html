@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>엑셀 정리기</title>
+<meta name="description" content="엉망인 엑셀을 끌어다 놓으면 증상을 진단하고, 내가 정한 규칙대로 정리합니다. 파일은 이 브라우저를 떠나지 않습니다.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="app">
+
+  <header class="top">
+    <div class="badge">3주차 · 목업</div>
+    <h1>엑셀 정리기</h1>
+    <p class="muted">엉망인 파일을 넣으면 <b>증상</b>을 찾고, <b>내가 정한 규칙</b>대로 정리합니다.
+      무엇을 바꿨는지 한 줄씩 남깁니다.</p>
+  </header>
+
+  <!-- 1 파일 ─────────────────────────────────── -->
+  <section class="panel">
+    <div class="step">1 · 파일</div>
+    <label id="drop" class="drop">
+      <input id="file" type="file" accept=".xlsx,.xls,.csv" hidden>
+      <b>파일을 끌어다 놓거나 눌러서 고르세요</b><br>
+      <span class="muted small">.xlsx · .csv</span><br>
+      <span class="safe">파일은 이 브라우저를 떠나지 않습니다</span>
+    </label>
+    <div class="row">
+      <button class="ghost" data-sample="상담이력.xlsx">예시: 상담이력</button>
+      <button class="ghost" data-sample="교육이수로그.csv">예시: 교육이수로그</button>
+    </div>
+    <p id="file-info" class="small muted" hidden></p>
+    <div id="preview" class="scroll" hidden></div>
+  </section>
+
+  <!-- 2 진단 ─────────────────────────────────── -->
+  <section id="sec-diag" class="panel" hidden style="margin-top:12px">
+    <div class="step">2 · 진단 — 규칙 없이 찾은 증상</div>
+    <div id="symptoms"></div>
+    <details id="values-box">
+      <summary>값 목록 — 눈으로 확인할 것</summary>
+      <p class="small muted">«완료»와 «수료»처럼 뜻이 같은 다른 말은 도구가 알아채지 못합니다. 사람이 봅니다.</p>
+      <div id="values"></div>
+    </details>
+  </section>
+
+  <!-- 3 규칙 ─────────────────────────────────── -->
+  <section id="sec-rules" class="panel" hidden style="margin-top:12px">
+    <div class="step">3 · 처리 규칙 — 사람이 정한 것</div>
+    <p id="rules-owner" class="note" hidden></p>
+    <div id="rules"></div>
+    <p id="rules-order" class="small muted"></p>
+    <div class="row">
+      <label class="ghost" style="text-align:center;cursor:pointer;flex:1;padding:11px;border:1px solid var(--line);border-radius:10px;font-weight:700;font-size:14px">
+        내 규칙 파일 불러오기<input id="rules-file" type="file" accept=".json" hidden></label>
+      <button id="btn-apply" class="primary">규칙대로 정리</button>
+    </div>
+  </section>
+
+  <!-- 4 결과 ─────────────────────────────────── -->
+  <section id="sec-result" class="panel" hidden style="margin-top:12px">
+    <div class="step">4 · 결과</div>
+    <div class="stat" id="stats"></div>
+    <p id="idem" class="small" style="margin-top:10px"></p>
+    <details open>
+      <summary>바꾼 것 — 한 줄씩</summary>
+      <div id="log" class="scroll"></div>
+    </details>
+    <div class="row">
+      <button id="dl-clean" class="primary">정리본 내려받기</button>
+      <button id="dl-log" class="ghost">변경 기록 내려받기</button>
+    </div>
+    <details>
+      <summary>정답과 대조 (정답 파일이 있을 때)</summary>
+      <p class="small muted">정답은 완성 기준이 아닙니다. <b>내 규칙이 무엇을 놓쳤는지</b> 보는 거울입니다.</p>
+      <label class="ghost" style="display:block;text-align:center;cursor:pointer;padding:10px;border:1px solid var(--line);border-radius:10px;font-weight:700">
+        정답 파일 고르기<input id="answer-file" type="file" accept=".csv,.xlsx" hidden></label>
+      <div id="compare"></div>
+    </details>
+  </section>
+
+  <footer class="fineprint">
+    예시 파일은 전부 만들어낸 것입니다. 정리는 모두 이 브라우저 안에서 일어납니다 — 파일이 어디로도 올라가지 않습니다.
+  </footer>
+</main>
+
+<script src="lib/xlsx.full.min.js"></script>
+<script src="clean.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

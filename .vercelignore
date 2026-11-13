@@ -1,0 +1,18 @@
+# 배포에는 정리기 화면 · rules/ · data/ 만 올린다
+.git/
+.claude/
+tools/
+정리/
+정리본/
+진단/
+README.md
+*.py
+.gitignore
+.vercelignore
+
+# 그 밖의 표 파일은 올리지 않는다. 예시 파일(data/)만 예외
+*.csv
+*.xlsx
+*.xls
+!data/*.csv
+!data/*.xlsx

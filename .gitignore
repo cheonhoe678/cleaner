@@ -1,0 +1,20 @@
+# 배포 · 실행 부산물
+.vercel/
+node_modules/
+.env
+.env.*
+__pycache__/
+*.pyc
+
+# 저장소에 올리지 않는 것
+.claude/
+tools/
+정리본/
+진단/
+
+# 그 밖의 표 파일은 올리지 않는다. 예시 파일(data/)만 예외
+*.csv
+*.xlsx
+*.xls
+!data/*.csv
+!data/*.xlsx

@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>엑셀 정리기 쉬운 설명</title>
+<style>
+  :root{
+    --bg:#faf8f4; --card:#fff; --ink:#26241f; --muted:#6b675e; --line:#e4dfd3;
+    --accent:#2f6f5e; --accent-bg:#e5f1ec; --warn:#a4552a; --warn-bg:#faeadf;
+    --code-bg:#f1eee6; --key:#8a3b7a; --str:#2f6f5e; --num:#b0561c;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#17171a; --card:#212126; --ink:#ecebe6; --muted:#9d9a90; --line:#35353c;
+      --accent:#7fcfb5; --accent-bg:#1f3530; --warn:#f0a77a; --warn-bg:#3a2a20;
+      --code-bg:#2a2a30; --key:#d79ac9; --str:#8fd6bd; --num:#f0b27a;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.75 -apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif}
+  main{max-width:760px;margin:0 auto;padding:32px 16px 80px}
+  h1{font-size:28px;margin:0 0 6px}
+  h2{font-size:21px;margin:44px 0 12px;padding-top:8px}
+  h3{font-size:17px;margin:24px 0 6px}
+  p{margin:8px 0}
+  .muted{color:var(--muted)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}
+  .tip{background:var(--accent-bg);border-radius:12px;padding:12px 16px;margin:14px 0}
+  .warn{background:var(--warn-bg);border-radius:12px;padding:12px 16px;margin:14px 0}
+  .tip b:first-child,.warn b:first-child{display:block;margin-bottom:2px}
+  .flow{display:flex;flex-direction:column;gap:0;margin:16px 0}
+  .step{display:flex;gap:14px;align-items:flex-start;background:var(--card);
+    border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+  .step+.step{margin-top:22px;position:relative}
+  .step+.step::before{content:"↓";position:absolute;top:-24px;left:26px;color:var(--muted);font-size:18px}
+  .num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--bg);
+    display:grid;place-items:center;font-weight:700;font-size:14px}
+  .step small{display:block;color:var(--muted);font-size:13px}
+  code{font-family:Consolas,"SF Mono",monospace;font-size:.9em;background:var(--code-bg);
+    padding:1px 6px;border-radius:5px}
+  pre{background:var(--code-bg);border-radius:12px;padding:14px 16px;overflow-x:auto;
+    font:14px/1.6 Consolas,"SF Mono",monospace;margin:10px 0;border:1px solid var(--line)}
+  pre code{background:none;padding:0;font-size:inherit}
+  .k{color:var(--key)} .s{color:var(--str)} .n{color:var(--num)} .c{color:var(--muted)}
+  table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--code-bg)}
+  .table-wrap{overflow-x:auto}
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:560px){.ba{grid-template-columns:1fr}}
+  .ba div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+  .ba b{display:block;font-size:13px;color:var(--muted);margin-bottom:2px}
+  ul{padding-left:22px;margin:8px 0} li{margin:3px 0}
+  .ok{color:var(--accent);font-weight:700} .no{color:var(--warn);font-weight:700}
+</style>
+</head>
+<body>
+<main>
+
+<h1>엑셀 정리기, 쉽게 설명해요</h1>
+<p class="muted">초등학생에게 말하듯 풀어 쓴 설명서입니다. 뒤쪽에는 "규칙 파일(JSON)"을 직접 쓰는 방법이 있어요.</p>
+
+<!-- ───────── 1 ───────── -->
+<h2>1. 이 도구는 뭐 하는 거예요?</h2>
+<div class="card">
+  <p>선생님이 반 친구들 <b>알림장</b>을 걷었다고 생각해 보세요.</p>
+  <p>어떤 친구는 "전화"라고 쓰고, 어떤 친구는 "유선"이라고 썼어요. 같은 뜻인데 글자가 달라서 세기가 힘들죠.
+     어떤 친구는 아예 빈칸으로 냈고, 어떤 친구는 똑같은 걸 두 번 냈어요.</p>
+  <p>이 도구는 <b>"청소 도우미 로봇"</b>이에요. 엑셀 파일을 주면 이렇게 해요.</p>
+  <ol>
+    <li>먼저 <b>어디가 지저분한지 찾아서</b> 알려줘요. (진단)</li>
+    <li>그다음 <b>사람이 정해 준 규칙</b>대로만 청소해요. (정리)</li>
+    <li>무엇을 바꿨는지 <b>한 줄씩 적어 둬요</b>. (변경 기록)</li>
+  </ol>
+</div>
+
+<div class="tip">
+  <b>제일 중요한 약속</b>
+  로봇은 스스로 판단하지 않아요. "유선은 전화로 바꿔라"처럼 <b>사람이 적어 준 대로만</b> 움직여요.
+  그 적어 준 종이가 바로 <code>rules</code> 폴더의 JSON 파일이에요.
+</div>
+
+<!-- ───────── 2 ───────── -->
+<h2>2. 파일을 끌어다 놓으면 무슨 일이 생겨요?</h2>
+<p>택배가 분류센터를 지나가는 것과 같아요.</p>
+
+<div class="flow">
+  <div class="step"><span class="num">1</span><div><b>파일을 받아요</b>
+    <small>app.js — "택배 접수 창구". 끌어다 놓은 파일을 받아요.</small></div></div>
+  <div class="step"><span class="num">2</span><div><b>내용을 읽어요</b>
+    <small>lib/xlsx.full.min.js — "번역가". 엑셀·CSV를 로봇이 읽을 수 있는 표로 바꿔요.</small></div></div>
+  <div class="step"><span class="num">3</span><div><b>어디가 지저분한지 살펴봐요</b>
+    <small>clean.js의 진단 — "건강검진". 빈칸, 튀는 숫자, 섞인 날짜 모양, 똑같은 줄을 찾아요.</small></div></div>
+  <div class="step"><span class="num">4</span><div><b>규칙 종이를 찾아와요</b>
+    <small>rules/파일이름.json — "청소 설명서". 파일 이름이 같은 설명서를 찾아요. 없으면 청소를 못 해요.</small></div></div>
+  <div class="step"><span class="num">5</span><div><b>"규칙대로 정리" 버튼을 누르면 청소해요</b>
+    <small>clean.js의 적용 — "청소 로봇". 설명서에 적힌 순서대로 하나씩 고쳐요.</small></div></div>
+  <div class="step"><span class="num">6</span><div><b>두 번 돌려 봐요</b>
+    <small>"청소한 방을 또 청소해도 똑같은가?" 확인해요. 달라지면 규칙이 이상한 거예요.</small></div></div>
+  <div class="step"><span class="num">7</span><div><b>내려받아요</b>
+    <small>정리본과 변경 기록, 두 개의 CSV 파일을 받아요.</small></div></div>
+</div>
+
+<div class="tip">
+  <b>내 파일은 어디로 가나요?</b>
+  <b>아무 데도 안 가요.</b> 모든 일이 내 컴퓨터의 브라우저 안에서 일어나요.
+  인터넷으로 읽어오는 건 "규칙 종이"와 "예시 파일"뿐이고, 내 파일을 올려 보내는 코드는 없어요.
+</div>
+
+<!-- ───────── 3 ───────── -->
+<h2>3. JSON이 뭐예요?</h2>
+<div class="card">
+  <p>JSON은 <b>이름표 붙은 서랍장</b>처럼 정보를 적는 약속된 글쓰기 방법이에요.</p>
+  <p>컴퓨터는 사람 말을 못 알아들어요. 그래서 "여기 이름표, 그 안에 내용"이라는 정해진 모양으로 써야 해요.</p>
+</div>
+
+<pre><code>{
+  <span class="k">"이름"</span>: <span class="s">"민수"</span>,
+  <span class="k">"나이"</span>: <span class="n">10</span>,
+  <span class="k">"좋아하는 것"</span>: [<span class="s">"축구"</span>, <span class="s">"게임"</span>]
+}</code></pre>
+
+<table>
+  <tr><th>생김새</th><th>뜻</th><th>예</th></tr>
+  <tr><td><code>{ }</code></td><td>서랍장 하나 (이름표: 내용 묶음)</td><td><code>{"a": 1}</code></td></tr>
+  <tr><td><code>[ ]</code></td><td>줄 세운 목록</td><td><code>["전화", "앱"]</code></td></tr>
+  <tr><td><code>"글자"</code></td><td>글자는 꼭 <b>큰따옴표</b>로 감싸요</td><td><code>"수료"</code></td></tr>
+  <tr><td><code>123</code></td><td>숫자는 따옴표 없이</td><td><code>180</code></td></tr>
+  <tr><td><code>true / false</code></td><td>켜기 / 끄기</td><td><code>"trim": true</code></td></tr>
+</table>
+
+<div class="warn">
+  <b>자주 하는 실수 4가지 — 하나라도 틀리면 "규칙 파일을 읽지 못했습니다"가 떠요</b>
+  <ul>
+    <li><span class="no">✕</span> 작은따옴표 <code>'전화'</code> → <span class="ok">○</span> 큰따옴표 <code>"전화"</code></li>
+    <li><span class="no">✕</span> 마지막 항목 뒤에 쉼표 <code>"a": 1,</code> <code>}</code> → <span class="ok">○</span> 마지막에는 쉼표 없음</li>
+    <li><span class="no">✕</span> 메모(<code>// 설명</code>) 쓰기 → JSON에는 메모가 없어요. 설명은 <code>"why"</code>에 적어요</li>
+    <li><span class="no">✕</span> 중괄호·대괄호 닫는 걸 깜빡함</li>
+  </ul>
+</div>
+
+<!-- ───────── 4 ───────── -->
+<h2>4. 규칙 파일은 어떻게 생겼어요?</h2>
+<p>규칙 파일은 <b>"청소 설명서"</b>예요. 큰 칸이 다섯 개 있어요.</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>칸 이름</th><th>역할</th><th>꼭 필요?</th></tr>
+  <tr><td><code>title</code></td><td>설명서 제목. 화면 위쪽에 보여요</td><td>사실상 필요 (없으면 "undefined"라고 떠요)</td></tr>
+  <tr><td><code>owner</code></td><td>"누가 정한 규칙인지" 한마디. 제목 옆에 보여요</td><td>사실상 필요</td></tr>
+  <tr><td><code>columns</code></td><td><b>열(세로 칸)마다</b> 어떻게 고칠지</td><td>청소하려면 필요</td></tr>
+  <tr><td><code>cross_checks</code></td><td><b>두 열을 같이 봐야</b> 보이는 이상한 줄 찾기</td><td>선택</td></tr>
+  <tr><td><code>duplicates</code></td><td>똑같은 줄을 어떻게 할지</td><td>선택</td></tr>
+  <tr><td><code>answer</code></td><td>"정답 파일"과 비교할 때 쓰는 설정</td><td>선택 (정답 대조를 쓸 때만)</td></tr>
+  <tr><td><code>order_note</code></td><td>"이 순서로 하는 이유" 설명. 화면에 보여요</td><td>선택</td></tr>
+</table>
+</div>
+
+<div class="warn">
+  <b>파일 이름이 중요해요</b>
+  <code>상담이력.xlsx</code> 파일을 넣으면 <code>rules/상담이력.json</code>을 찾아요.
+  이름이 하나라도 다르면 못 찾아요. (이름이 달라도 화면의 "내 규칙 파일 불러오기" 버튼으로 직접 고를 수 있어요.)
+</div>
+
+<!-- ───────── 5 ───────── -->
+<h2>5. columns — 열마다 청소법 적기</h2>
+<p><code>columns</code> 안에 <b>엑셀의 열 이름</b>을 적고, 그 안에 "어떻게 고칠지"를 적어요.
+  열 이름은 엑셀 맨 윗줄 글자와 <b>똑같이</b> 써야 해요. 없는 열 이름이면 조용히 건너뛰어요.</p>
+
+<pre><code>"columns": {
+  <span class="k">"채널"</span>: {                          <span class="c">← 엑셀의 "채널" 열</span>
+    <span class="k">"trim"</span>: <span class="n">true</span>,                      <span class="c">← 앞뒤 빈칸 지우기</span>
+    <span class="k">"map"</span>: { <span class="k">"유선"</span>: <span class="s">"전화"</span> },       <span class="c">← "유선"을 "전화"로 바꾸기</span>
+    <span class="k">"why"</span>: <span class="s">"같은 채널을 여러 이름으로 적었다"</span>
+  }
+}</code></pre>
+
+<h3>쓸 수 있는 도구 상자</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>도구</th><th>뜻 (쉽게)</th><th>이렇게 써요</th></tr>
+  <tr><td><code>trim</code></td><td>글자 앞뒤의 쓸데없는 빈칸 털기</td><td><code>"trim": true</code></td></tr>
+  <tr><td><code>map</code></td><td>"이 글자는 저 글자로 바꿔" 변환표</td><td><code>{"유선": "전화", "app": "앱"}</code></td></tr>
+  <tr><td><code>blank_to</code></td><td>빈칸이면 이 값으로 채우기</td><td><code>"blank_to": "N"</code></td></tr>
+  <tr><td><code>strip_units</code></td><td>숫자 뒤에 붙은 단위 떼기</td><td><code>["개", "원"]</code> ("3개" → "3")</td></tr>
+  <tr><td><code>number</code></td><td>숫자처럼 생긴 글자를 진짜 숫자로</td><td><code>"number": true</code></td></tr>
+  <tr><td><code>date</code></td><td>날짜 모양을 <code>2025-03-14</code> 하나로</td><td><code>"date": true</code></td></tr>
+  <tr><td><code>rescale</code></td><td>너무 큰 숫자는 단위가 다른 것으로 보고 나누기</td><td><code>{"over": 180, "divide": 60}</code></td></tr>
+  <tr><td><code>missing</code></td><td>빈칸인 줄에 깃발 꽂기 (지우거나 채우지는 않음)</td><td><code>"missing": "flag"</code></td></tr>
+  <tr><td><code>range</code></td><td>범위를 벗어난 숫자에 깃발 꽂기</td><td><code>{"min": 0, "max": 400, "action": "flag"}</code></td></tr>
+  <tr><td><code>why</code></td><td>"왜 이렇게 정했는지" 이유. <b>로봇은 안 읽고 사람이 읽어요</b>. 변경 기록에도 남아요</td><td><code>"why": "…"</code></td></tr>
+</table>
+</div>
+
+<h3>실제 예: 이렇게 바뀌어요</h3>
+<div class="ba">
+  <div><b>채널 (전)</b>유선 · 전화상담 · chatbot · APP · e-mail</div>
+  <div><b>채널 (후)</b>전화 · 전화 · 챗봇 · 앱 · 이메일</div>
+  <div><b>상담시간 (전)</b>25 · 31 · 1800 · 2400</div>
+  <div><b>상담시간 (후)</b>25 · 31 · 30 · 40 <span class="muted">(180 넘는 건 ÷60)</span></div>
+  <div><b>과정수 (전)</b>3개 · 5 · 2개</div>
+  <div><b>과정수 (후)</b>3 · 5 · 2</div>
+</div>
+
+<div class="tip">
+  <b>순서가 있어요 (한 열 안에서)</b>
+  로봇은 항상 이 순서로 해요: <code>trim → map → blank_to → strip_units → number → date → rescale → missing / range</code><br>
+  그래서 "앞뒤 빈칸을 먼저 털고, 그다음에 변환표를 본다"고 생각하면 돼요.
+  예를 들어 <code>" 유선 "</code>은 trim으로 <code>"유선"</code>이 된 다음에야 map에서 "전화"로 바뀌어요.
+</div>
+
+<div class="warn">
+  <b>알아 두면 좋은 함정</b>
+  <ul>
+    <li><code>map</code>은 <b>글자가 정확히 같을 때만</b> 바뀌어요. <code>"APP"</code>와 <code>"app"</code>는 서로 달라서 둘 다 적어야 해요.</li>
+    <li><code>missing</code>과 <code>range</code>의 <code>action</code>은 지금 <code>"flag"</code>만 동작해요. 다른 값을 쓰면 아무 일도 안 일어나요.</li>
+    <li><code>range</code>는 <b>숫자가 된 값</b>만 검사해요. 그래서 같은 칸에 <code>"number": true</code>도 같이 써 두는 게 좋아요.</li>
+    <li><code>rescale</code>도 숫자에만 통해요. 역시 <code>number</code>와 함께 써요.</li>
+    <li>깃발(<code>flag</code>)은 줄을 지우지 않고, 결과의 <code>_표시</code> 열에 이유를 적어 줘요.</li>
+  </ul>
+</div>
+
+<!-- ───────── 6 ───────── -->
+<h2>6. cross_checks — 두 열을 같이 봐야 보이는 거짓말</h2>
+<div class="card">
+  <p>시험지에서 "점수 0점"인데 "합격"이라고 적혀 있으면 이상하죠?
+     점수만 봐도, 합격만 봐도 멀쩡해 보여요. <b>둘을 같이 봐야</b> 이상한 걸 알 수 있어요.</p>
+  <p>이럴 때 <code>cross_checks</code>를 써요. 줄을 지우지 않고 <b>깃발만 꽂아서</b> 사람이 다시 확인하게 해요.</p>
+</div>
+
+<pre><code><span class="k">"cross_checks"</span>: [
+  {
+    <span class="k">"label"</span>: <span class="s">"이수 0시간인데 수료"</span>,          <span class="c">← 깃발에 적힐 글자</span>
+    <span class="k">"when"</span>: [                                  <span class="c">← 아래 조건이 "전부" 맞을 때</span>
+      [<span class="s">"이수시간"</span>, <span class="s">"=="</span>, <span class="n">0</span>],
+      [<span class="s">"수료여부"</span>, <span class="s">"=="</span>, <span class="s">"수료"</span>]
+    ],
+    <span class="k">"why"</span>: <span class="s">"두 열을 같이 봐야 드러난다"</span>
+  }
+]</code></pre>
+
+<p>조건 한 줄은 <b>[열 이름, 비교 방법, 값]</b> 세 칸이에요.</p>
+<table>
+  <tr><th>비교 방법</th><th>뜻</th><th>예</th></tr>
+  <tr><td><code>"=="</code></td><td>같다</td><td><code>["수료여부", "==", "수료"]</code></td></tr>
+  <tr><td><code>"!="</code></td><td>다르다</td><td><code>["채널", "!=", "전화"]</code></td></tr>
+  <tr><td><code>"&gt;"</code> / <code>"&lt;"</code></td><td>크다 / 작다 (숫자)</td><td><code>["상담시간", "&gt;", 100]</code></td></tr>
+  <tr><td><code>"blank"</code></td><td>비어 있다</td><td><code>["이수시간", "blank"]</code></td></tr>
+</table>
+<div class="tip">
+  <b>두 가지 약속</b>
+  <ul>
+    <li><code>when</code> 안의 조건은 <b>전부 맞아야(그리고)</b> 깃발이 꽂혀요. "또는"은 없어요.</li>
+    <li>값에 <b>숫자</b>(<code>0</code>)를 쓰면 숫자로, <b>글자</b>(<code>"수료"</code>)를 쓰면 글자로 비교해요.</li>
+    <li>빈칸은 0이 아니에요. 빈칸인 줄은 <code>"=="</code>, <code>"&lt;"</code> 같은 비교에서 조용히 빠져요. (없는 사실을 만들지 않으려고요.)</li>
+  </ul>
+</div>
+
+<!-- ───────── 7 ───────── -->
+<h2>7. duplicates — 똑같은 줄 한 번만 남기기</h2>
+<pre><code><span class="k">"duplicates"</span>: {
+  <span class="k">"action"</span>: <span class="s">"drop"</span>,                       <span class="c">← 지금은 "drop"(하나만 남기고 지움)만 동작</span>
+  <span class="k">"why"</span>: <span class="s">"모든 열이 같은 행은 하나만 남긴다"</span>
+}</code></pre>
+<p><b>모든 열이 완전히 같을 때만</b> 같은 줄로 봐요. 한 칸이라도 다르면(예: 접수일이 다르면) 다른 줄이라 남겨요.
+  중복 검사는 <b>맨 마지막</b>에 해요. 그래서 날짜 모양을 먼저 맞춘 뒤에야 "사실은 같은 줄"이 드러나요.</p>
+
+<!-- ───────── 8 ───────── -->
+<h2>8. answer — 정답 파일과 비교하고 싶을 때 (선택)</h2>
+<pre><code><span class="k">"answer"</span>: {
+  <span class="k">"key"</span>: [<span class="s">"상담ID"</span>, <span class="s">"접수일"</span>],             <span class="c">← 같은 줄을 찾는 "주민번호" 열들</span>
+  <span class="k">"compare"</span>: [<span class="s">"채널"</span>, <span class="s">"재문의"</span>, <span class="s">"상담시간"</span>],   <span class="c">← 값이 같은지 비교할 열들</span>
+  <span class="k">"note"</span>: <span class="s">"정답은 완성 기준이 아니다"</span>
+}</code></pre>
+<p>정답은 "만점 기준"이 아니라 <b>"내 규칙이 뭘 놓쳤나"를 비춰 보는 거울</b>이에요.</p>
+
+<!-- ───────── 9 ───────── -->
+<h2>9. 처음부터 내 규칙 파일 만들기</h2>
+<p>"수강신청.xlsx"라는 파일에 <b>학년</b>(1·2·3), <b>결제금액</b>("12,000원"처럼 단위 섞임), <b>상태</b>("완료/끝/Done" 섞임)가 있다고 해 볼게요.</p>
+
+<ol>
+  <li>파일 이름을 <code>rules/수강신청.json</code>으로 만들어요.</li>
+  <li>아래를 복사해서 열 이름과 규칙을 내 파일에 맞게 바꿔요.</li>
+  <li>엑셀 파일을 끌어다 놓고 "규칙대로 정리"를 눌러요.</li>
+  <li>결과의 <b>"두 번 돌려도 같은 결과"</b>가 ✓로 나오는지, 변경 기록이 말이 되는지 눈으로 봐요.</li>
+</ol>
+
+<pre><code>{
+  <span class="k">"title"</span>: <span class="s">"수강신청 처리 규칙"</span>,
+  <span class="k">"owner"</span>: <span class="s">"사람이 정한 규칙입니다. 도구는 이대로 할 뿐입니다."</span>,
+  <span class="k">"order_note"</span>: <span class="s">"표기를 먼저 맞춘 뒤 두 열을 같이 봅니다."</span>,
+
+  <span class="k">"columns"</span>: {
+    <span class="k">"결제금액"</span>: {
+      <span class="k">"strip_units"</span>: [<span class="s">"원"</span>],
+      <span class="k">"number"</span>: <span class="n">true</span>,
+      <span class="k">"missing"</span>: <span class="s">"flag"</span>,
+      <span class="k">"why"</span>: <span class="s">"'12,000원' 같은 글자를 숫자로. 빈칸은 채우지 않고 표시만"</span>
+    },
+    <span class="k">"상태"</span>: {
+      <span class="k">"trim"</span>: <span class="n">true</span>,
+      <span class="k">"map"</span>: { <span class="k">"끝"</span>: <span class="s">"완료"</span>, <span class="k">"Done"</span>: <span class="s">"완료"</span> },
+      <span class="k">"why"</span>: <span class="s">"같은 뜻을 '완료' 하나로"</span>
+    }
+  },
+
+  <span class="k">"cross_checks"</span>: [
+    {
+      <span class="k">"label"</span>: <span class="s">"0원인데 완료"</span>,
+      <span class="k">"when"</span>: [ [<span class="s">"결제금액"</span>, <span class="s">"=="</span>, <span class="n">0</span>], [<span class="s">"상태"</span>, <span class="s">"=="</span>, <span class="s">"완료"</span>] ],
+      <span class="k">"why"</span>: <span class="s">"지우지 않고 표시해서 사람이 확인"</span>
+    }
+  ],
+
+  <span class="k">"duplicates"</span>: { <span class="k">"action"</span>: <span class="s">"drop"</span>, <span class="k">"why"</span>: <span class="s">"모든 열이 같은 행은 하나만"</span> }
+}</code></pre>
+
+<div class="tip">
+  <b>규칙을 쓰는 요령 3가지</b>
+  <ul>
+    <li><b>이유(<code>why</code>)를 꼭 적어요.</b> 한 달 뒤의 내가 "왜 이렇게 했지?" 하고 물을 때 답이 돼요.</li>
+    <li><b>모르는 건 채우지 말고 깃발만 꽂아요.</b> 빈칸을 추측해서 채우면 없던 사실이 생겨요.</li>
+    <li><b>값 목록을 눈으로 봐요.</b> "완료"와 "수료"가 같은 뜻인지는 로봇이 몰라요. 사람이 보고 <code>map</code>에 적어야 해요.</li>
+  </ul>
+</div>
+
+<!-- ───────── 10 ───────── -->
+<h2>10. 한눈에 정리</h2>
+<div class="card">
+  <ul>
+    <li><b>로봇</b>(clean.js)은 규칙 종이대로만 움직여요. 스스로 판단하지 않아요.</li>
+    <li><b>규칙 종이</b>(rules/*.json)는 사람이 써요. 이유(<code>why</code>)까지 같이 적어요.</li>
+    <li>내 파일은 <b>브라우저 밖으로 나가지 않아요</b>.</li>
+    <li>로봇이 못 보는 것: 뜻이 같은 다른 말, 색깔로만 한 표시, 병합된 칸, 여러 시트. 이건 사람이 눈으로 봐야 해요.</li>
+  </ul>
+</div>
+
+</main>
+</body>
+</html>
